@@ -21,7 +21,6 @@ let addWord = function(word, definition) {
 };
 
 let retrieveWords = function() {
-  console.log('retrieve!');
   return Word.estimatedDocumentCount()
     .then(count => {
       if (count === 0) {
@@ -61,7 +60,15 @@ let deleteWord = function(_id) {
     })
 }
 
+let editWord = function(_id, word, definition) {
+  return Word.findByIdAndUpdate({_id}, {word, definition})
+    .catch(err => {
+      console.log('deleteWord error');
+    })
+}
+
 module.exports.addWord = addWord;
 module.exports.retrieveWords = retrieveWords;
 module.exports.populateGlossary = populateGlossary;
 module.exports.deleteWord = deleteWord;
+module.exports.editWord = editWord;

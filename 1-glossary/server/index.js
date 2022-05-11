@@ -36,8 +36,6 @@ app.get('/words', (req, res) => {
 });
 
 app.post('/words', (req, res) => {
-  console.log('got a post request!');
-  console.log(req.body.word, req.body.definition);
   db.addWord(req.body.word, req.body.definition)
     .then(() => {
       res.end();
@@ -50,7 +48,6 @@ app.post('/words', (req, res) => {
 });
 
 app.post('/delete', (req, res) => {
-  console.log('got a delete request!');
   db.deleteWord(req.body.wid)
   .then(() => {
     res.end();
@@ -58,9 +55,21 @@ app.post('/delete', (req, res) => {
   .catch(err => {
     console.log('app.post \/delete error')
     res.end();
-  })
-  ;
+  });
 })
+
+app.post('/edit', (req, res) => {
+  db.editWord(req.body.id, req.body.word, req.body.definition)
+  .then(() => {
+    res.end();
+  })
+  .catch(err => {
+    console.log('app.post \/delete error')
+    res.end();
+  });
+
+})
+
 
 app.listen(process.env.PORT);
 console.log(`Listening at http://localhost:${process.env.PORT}`);

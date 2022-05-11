@@ -38,8 +38,10 @@ class Glossary extends React.Component {
   refresh() {
     return axios.get('/words')
     .then(response => {
-      // console.log('refresh data', response.data);
       return this.setState({wdPairs: response.data});
+    })
+    .catch(err => {
+      console.log('refresh error');
     })
   }
   handleSubmit(e) {
@@ -63,8 +65,14 @@ class Glossary extends React.Component {
   handleDefinitionChange(e) {
     this.setState({definition: e.target.value});
   }
-  handleEdit(e) {
-    console.log(e.target.parentElement);
+  handleEdit(id, word, definition) {
+    axios.post('/edit', {id, word, definition})
+    .then(() => {
+      return this.refresh();
+    })
+    .catch(err => {
+      console.log('handleEdit error');
+    })
   }
   handleDelete(e) {
     axios.post('/delete', {
