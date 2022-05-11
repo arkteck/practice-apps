@@ -1,5 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
+import WordDefinition from "./wordDefinition.jsx";
 
 
 function WordList(props) {
@@ -8,19 +9,13 @@ function WordList(props) {
     <thead>
       <tr>
         <th></th>
-        <th></th>
         <th>Word</th>
         <th>Definition</th>
       </tr>
     </thead>
     <tbody>
       {props.wdPairs.map(pair => (
-        <tr key={pair._id} wid={pair._id}>
-          <td className="delete" onClick={props.handleDelete}>❌</td>
-          <td className="edit" onClick={props.handleEdit}>✏️</td>
-          <td className="word">{pair.word}</td>
-          <td className="definition">{pair.definition}</td>
-        </tr>
+        <WordDefinition pair={pair} handleDelete={props.handleDelete} handleEdit={props.handleEdit}/>
       ))}
     </tbody>
   </table>

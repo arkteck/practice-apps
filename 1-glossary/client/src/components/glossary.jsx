@@ -1,7 +1,8 @@
 import React from "react";
 import { render } from "react-dom";
-import Form from "./form.jsx";
+import Form from "./form.jsx";5
 import WordList from "./wordList.jsx";
+import WordDefinition from "./wordDefinition.jsx";
 
 const axios = require('axios');
 
@@ -43,6 +44,7 @@ class Glossary extends React.Component {
   }
   handleSubmit(e) {
     e.preventDefault();
+    e.target.reset();
     axios.post('/words', {
       word: this.state.word,
       definition: this.state.definition
@@ -62,10 +64,9 @@ class Glossary extends React.Component {
     this.setState({definition: e.target.value});
   }
   handleEdit(e) {
-    console.log('edit ', e.target.parentElement.getAttribute('wid'));
+    console.log(e.target.parentElement);
   }
   handleDelete(e) {
-    console.log('delete ',  e.target.parentElement.getAttribute('wid'));
     axios.post('/delete', {
       wid: e.target.parentElement.getAttribute('wid')
     })
