@@ -14,6 +14,8 @@ class Glossary extends React.Component {
       wdPairs: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleWordChange = this.handleWordChange.bind(this);
     this.handleDefinitionChange = this.handleDefinitionChange.bind(this);
     this.refresh = this.refresh.bind(this);
@@ -25,9 +27,9 @@ class Glossary extends React.Component {
   render() {
     return (
       <div>
-        <Form handleSubmit={this.handleSubmit} handleWordChange={this.handleWordChange} handleDefinitionChange={this.handleDefinitionChange}/>
         <h1>GLOSSARY</h1>
-        <WordList wdPairs={this.state.wdPairs}/>
+        <Form handleSubmit={this.handleSubmit} handleWordChange={this.handleWordChange} handleDefinitionChange={this.handleDefinitionChange}/>
+        <WordList wdPairs={this.state.wdPairs} handleEdit={this.handleEdit} handleDelete={this.handleDelete}/>
       </div>
     );
   }
@@ -35,7 +37,7 @@ class Glossary extends React.Component {
   refresh() {
     return axios.get('/words')
     .then(response => {
-      console.log('refresh data', response.data);
+      // console.log('refresh data', response.data);
       return this.setState({wdPairs: response.data});
     })
   }
@@ -46,7 +48,6 @@ class Glossary extends React.Component {
       definition: this.state.definition
     })
     .then(() => {
-      console.log('refresh after adding');
       return this.refresh();
     })
     .catch(err => {
@@ -59,6 +60,21 @@ class Glossary extends React.Component {
   }
   handleDefinitionChange(e) {
     this.setState({definition: e.target.value});
+  }
+  handleEdit(e) {
+    console.log('edit ', e.target.parentElement.getAttribute('wid'));
+  }
+  handleDelete(e) {
+    console.log('delete ',  e.target.parentElement.getAttribute('wid'));
+    axios.post('/delete', {
+      wid: e.target.parentElement.getAttribute('wid')
+    })
+    .then(() => {
+      return this.refresh();
+    })
+    .catch(err => {
+      console.log('handleDelete error');
+    })
   }
 }
 

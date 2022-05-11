@@ -4,7 +4,6 @@ import Glossary from "./components/glossary.jsx";
 
 render(
   <div>
-    <p>Hello, World!</p>
     <Glossary />
   </div>,
   document.getElementById("root")

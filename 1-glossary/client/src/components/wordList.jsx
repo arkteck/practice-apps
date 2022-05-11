@@ -7,15 +7,19 @@ function WordList(props) {
   <table>
     <thead>
       <tr>
+        <th></th>
+        <th></th>
         <th>Word</th>
         <th>Definition</th>
       </tr>
     </thead>
     <tbody>
       {props.wdPairs.map(pair => (
-        <tr>
-          <td>{pair.word}</td>
-          <td>{pair.definition}</td>
+        <tr key={pair._id} wid={pair._id}>
+          <td className="delete" onClick={props.handleDelete}>❌</td>
+          <td className="edit" onClick={props.handleEdit}>✏️</td>
+          <td className="word">{pair.word}</td>
+          <td className="definition">{pair.definition}</td>
         </tr>
       ))}
     </tbody>
