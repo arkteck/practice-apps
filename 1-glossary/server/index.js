@@ -24,7 +24,6 @@ app.get('/', (req, res) => {
 app.get('/words', (req, res) => {
   db.retrieveWords()
     .then(data => {
-      // console.log('app get words data', data);
       res.send(data);
       res.end();
     })
@@ -67,9 +66,19 @@ app.post('/edit', (req, res) => {
     console.log('app.post \/delete error')
     res.end();
   });
-
 })
 
+app.post('/search', (req, res) => {
+  db.search(req.body.term)
+  .then(data => {
+    res.send(data);
+    res.end();
+  })
+  .catch(err => {
+    console.log('app.post \/search error')
+    res.end();
+  });
+})
 
 app.listen(process.env.PORT);
 console.log(`Listening at http://localhost:${process.env.PORT}`);

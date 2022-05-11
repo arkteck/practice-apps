@@ -57,18 +57,28 @@ let deleteWord = function(_id) {
   return Word.deleteOne({_id})
     .catch(err => {
       console.log('deleteWord error');
-    })
+    });
 }
 
 let editWord = function(_id, word, definition) {
   return Word.findByIdAndUpdate({_id}, {word, definition})
     .catch(err => {
       console.log('deleteWord error');
-    })
+    });
 }
+
+let search = function(term) {
+  let searchTerm = new RegExp(term, 'i');
+  return Word.find({$or: [{word: searchTerm}, {definition: searchTerm}]})
+    .catch(err => {
+      console.log('search error');
+    });
+}
+
 
 module.exports.addWord = addWord;
 module.exports.retrieveWords = retrieveWords;
 module.exports.populateGlossary = populateGlossary;
 module.exports.deleteWord = deleteWord;
 module.exports.editWord = editWord;
+module.exports.search = search;
