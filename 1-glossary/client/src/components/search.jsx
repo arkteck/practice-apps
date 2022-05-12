@@ -8,7 +8,7 @@ function Search(props) {
       <label>
         Search the glossary:
         <br />
-        <input type="text" name="search" placeholder="search" onChange={props.handleSearchChange} required/>
+        <input type="text" name="search" placeholder="search" onChange={props.handleSearchChange}/>
       </label>
       <input type="submit" value="Search" />
     </form>

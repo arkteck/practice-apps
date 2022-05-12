@@ -103,7 +103,7 @@ class Glossary extends React.Component {
       return this.setState({wdPairs: response.data});
     })
     .catch(err => {
-      console.log('handleDelete error');
+      console.log('handleSearch error');
     })
 
   }
