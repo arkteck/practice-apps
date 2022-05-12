@@ -63,3 +63,7 @@ main {
 .delete:hover {
   cursor: pointer;
 }
+
+#hiddenCol {
+  visibility: hidden;
+}

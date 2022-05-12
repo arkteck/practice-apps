@@ -23,22 +23,23 @@ class WordDefinition extends React.Component {
   }
 
   render() {
+
     if (this.state.editWord) {
-      return (<tr key={this.props.pair._id} wid={this.props.pair._id} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+      return (<tr wid={this.props.pair._id} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
         {this.state.hover ? <td className="delete" onClick={this.props.handleDelete}>❌</td> : <td></td>}
-        <td className="word"><input type="text" value={this.state.word} onChange={this.handleWordChange} onBlur={this.onBlur} onKeyDown={this.onKeyDown}/></td>
+        <td className="word"><input size={this.state.word.length} type="text" value={this.state.word} onChange={this.handleWordChange} onBlur={this.onBlur} onKeyDown={this.onKeyDown}/></td>
         <td className="definition" onClick={this.handleDefinitionClick}>{this.state.definition}</td>
       </tr>)
 
     } else if (this.state.editDefinition) {
-      return (<tr key={this.props.pair._id} wid={this.props.pair._id} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+      return (<tr wid={this.props.pair._id} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
         {this.state.hover ? <td className="delete" onClick={this.props.handleDelete}>❌</td> : <td></td>}
         <td className="word" onClick={this.handleWordClick}>{this.state.word}</td>
-        <td className="definition"><input type="text" value={this.state.definition} onChange={this.handleDefinitionChange} onBlur={this.onBlur} onKeyDown={this.onKeyDown}/></td>
+        <td className="definition"><input size={this.state.definition.length} type="text" value={this.state.definition} onChange={this.handleDefinitionChange} onBlur={this.onBlur} onKeyDown={this.onKeyDown}/></td>
       </tr>)
 
     }else {
-      return (<tr key={this.props.pair._id} wid={this.props.pair._id} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+      return (<tr wid={this.props.pair._id} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
         {this.state.hover ? <td className="delete" onClick={this.props.handleDelete}>❌</td> : <td></td>}
         <td className="word" onClick={this.handleWordClick}>{this.props.pair.word}</td>
         <td className="definition" onClick={this.handleDefinitionClick}>{this.props.pair.definition}</td>

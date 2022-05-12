@@ -8,14 +8,14 @@ function WordList(props) {
   <table>
     <thead>
       <tr>
-        <th></th>
+        <th id="hiddenCol">❌</th>
         <th>Word</th>
         <th>Definition</th>
       </tr>
     </thead>
     <tbody>
       {props.wdPairs.map(pair => (
-        <WordDefinition pair={pair} handleDelete={props.handleDelete} handleEdit={props.handleEdit}/>
+        <WordDefinition key={pair._id} pair={pair} handleDelete={props.handleDelete} handleEdit={props.handleEdit}/>
       ))}
     </tbody>
   </table>
