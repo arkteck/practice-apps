@@ -6,6 +6,7 @@ import WordDefinition from "./wordDefinition.jsx";
 import Search from "./search.jsx";
 
 const axios = require('axios');
+const cheerio = require('cheerio');
 
 class Glossary extends React.Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class Glossary extends React.Component {
   }
 
   componentDidMount() {
+
     this.refresh();
   }
 
@@ -135,46 +137,38 @@ class Glossary extends React.Component {
     })
   }
 
+  randomDate(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  }
+
   handleRandom() {
 
-    const options = {
-      method: 'GET',
-      url: 'https://wordsapiv1.p.rapidapi.com/words/',
-      params: {random: 'true'},
-      headers: {
-        'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
-        'X-RapidAPI-Key': '9ef4107bf6msh40b689727bea00ap199af8jsn94c98727da82'
-      }
-    };
+    const d = this.randomDate(new Date(2006, 7, 31), new Date());
+    const year = d.getFullYear();
+    let month = d.getMonth() + 1;
+    month = month.toString().padStart(2, '0');
+    let day = d.getDate();
+    day = day.toString().padStart(2, '0');
+    console.log(year, month, day);
 
-    return axios.request(options)
-    .then(response => {
-      const options = {
-        method: 'GET',
-        url: `https://wordsapiv1.p.rapidapi.com/words/${response.data.word}/definitions`,
-        headers: {
-          'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
-          'X-RapidAPI-Key': '9ef4107bf6msh40b689727bea00ap199af8jsn94c98727da82'
-        }
-      };
-      return axios.request(options)
-    }).then(response => {
-      if (response.data.definitions.length) {
+    return axios.get(`https://www.merriam-webster.com/word-of-the-day/${year}-${month}-${day}`)
+      .then(response => {
+        let html = response.data;
+        let $ = cheerio.load(html);
+        const word = $('.article-header-container.wod-article-header .word-header h1').text();
+        const definition = $('.wod-article-container p').eq(0).text().split(':')[1].trim();
+        console.log(word, definition);
         return axios.post('/words', {
-          word: response.data.word,
-          definition: response.data.definitions[0].definition
+          word, definition
         })
-      } else {
-        console.log(`no definitions for ${response.data.word}`)
-      }
-    })
-    .then(() => {
-      return this.refresh();
-    })
-    .catch(err=>
-      {
-        console.log('random word error')
       })
+      .then(() => {
+        return this.refresh();
+      })
+      .catch(err => {
+        console.log('wotd error', err);
+      })
+
   }
 
   handleNext() {
