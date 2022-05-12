@@ -6,11 +6,10 @@ function Search(props) {
   return <div className="form">
     <form onSubmit={props.handleSearch}>
       <label>
-        Search the glossary:
+        Filter the glossary:
         <br />
-        <input type="text" name="search" placeholder="search" onChange={props.handleSearchChange}/>
+        <input type="text" name="filter" placeholder="filter" onChange={props.handleSearchChange}/>
       </label>
-      <input type="submit" value="Search" />
     </form>
   </div>;
 }

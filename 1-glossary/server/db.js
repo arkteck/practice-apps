@@ -16,7 +16,6 @@ const wordSchema = new mongoose.Schema({
 const Word = mongoose.model('Word', wordSchema);
 
 let addWord = function(word, definition) {
-  console.log('add!', word, definition);
   return Word.create({word, definition});
 };
 
@@ -31,7 +30,7 @@ let retrieveWords = function(skip = 0) {
       return Word.find({}, 'word definition', {limit: 10, skip});
     })
     .catch((err) => {
-
+      console.log('retrieveWords error');
     })
 
 };
@@ -75,6 +74,14 @@ let search = function(term) {
     });
 }
 
+let count = function() {
+
+  return Word.estimatedDocumentCount()
+    .catch((err) => {
+      console.log('count error');
+    })
+
+}
 
 module.exports.addWord = addWord;
 module.exports.retrieveWords = retrieveWords;
@@ -82,3 +89,4 @@ module.exports.populateGlossary = populateGlossary;
 module.exports.deleteWord = deleteWord;
 module.exports.editWord = editWord;
 module.exports.search = search;
+module.exports.count = count;

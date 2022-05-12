@@ -16,6 +16,7 @@ class Glossary extends React.Component {
       wdPairs: [],
       search: '',
       skip: 0,
+      count: 0,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
@@ -28,6 +29,7 @@ class Glossary extends React.Component {
     this.handlePrevious = this.handlePrevious.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.refresh = this.refresh.bind(this);
+    this.count = this.count.bind(this);
   }
 
   componentDidMount() {
@@ -43,16 +45,23 @@ class Glossary extends React.Component {
         <button type="button" onClick={this.handleRandom}>Random Word and Definition</button>
         <br />
         <button type="button" onClick={this.handlePrevious} disabled={this.state.skip === 0}>Previous Page</button>
-        <button type="button" onClick={this.handleNext}>Next Page</button>
+        <button type="button" onClick={this.handleNext} disabled={this.state.count - this.state.skip <= 10}>Next Page</button>
         <WordList wdPairs={this.state.wdPairs} handleEdit={this.handleEdit} handleDelete={this.handleDelete}/>
       </div>
     );
   }
 
   refresh() {
-    return axios.get(`/words/${this.state.skip}`)
+    return this.count()
+    .then(() => {
+      return axios.get(`/words/${this.state.skip}`)
+    })
     .then(response => {
-      return this.setState({wdPairs: response.data});
+      if (response.data.length) {
+        return this.setState({wdPairs: response.data});
+      } else {
+        return this.handlePrevious()
+      }
     })
     .catch(err => {
       console.log('refresh error');
@@ -174,20 +183,27 @@ class Glossary extends React.Component {
 
 
   handlePrevious() {
-    if (this.state.skip) {
-      this.setState({skip: this.state.skip - 10}, () => {
-        axios.get(`/words/${this.state.skip}`)
-          .then(response => {
-            return this.setState({wdPairs: response.data});
-          })
-          .catch(err => {
-            console.log('refresh error');
-          })
-        }
-      );
-    }
+    this.setState({skip: this.state.skip - 10}, () => {
+      axios.get(`/words/${this.state.skip}`)
+        .then(response => {
+          return this.setState({wdPairs: response.data});
+        })
+        .catch(err => {
+          console.log('refresh error');
+        })
+      }
+    );
   }
 
+  count() {
+    return axios.get(`/count`)
+    .then(response => {
+      return this.setState({count: response.data});
+    })
+    .catch(err => {
+      console.log('count error');
+    })
+  }
 }
 
 export default Glossary;

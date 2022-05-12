@@ -32,8 +32,8 @@ app.get('/words', (req, res) => {
       res.end();
     })
 });
+
 app.get('/words/:skip', (req, res) => {
-  console.log('get words skip', req.params.skip);
   db.retrieveWords(Number(req.params.skip))
     .then(data => {
       res.send(data);
@@ -44,6 +44,19 @@ app.get('/words/:skip', (req, res) => {
       res.end();
     })
 });
+
+app.get('/count', (req, res) => {
+  db.count()
+    .then(data => {
+      res.send(data.toString());
+      res.end();
+    })
+    .catch(err => {
+      console.log('app.get \/count error')
+      res.end();
+    })
+});
+
 app.post('/words', (req, res) => {
   db.addWord(req.body.word, req.body.definition)
     .then(() => {
