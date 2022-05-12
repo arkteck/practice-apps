@@ -55,10 +55,10 @@ class Word extends React.Component {
 
   stylize() {
     let s = reactStringReplace(this.state.word, /_(.*?)_/g, (match, i) => (
-      <span key = {i} style={{'fontStyle': 'italic'}}>{match}</span>
+      <span key = {match + i} style={{'fontStyle': 'italic'}}>{match}</span>
     ))
     s = reactStringReplace(s, /\*\*(.*?)\*\*/g, (match, i) => (
-      <span key = {i} style={{'fontWeight': 'bold'}}>{match}</span>
+      <span key = {match + i} style={{'fontWeight': 'bold'}}>{match}</span>
     ))
     return s;
   }
