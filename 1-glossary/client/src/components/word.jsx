@@ -1,5 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
+import reactStringReplace from 'react-string-replace';
 
 const axios = require('axios');
 
@@ -13,7 +14,9 @@ class Word extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
+    this.stylize = this.stylize.bind(this);
   }
+
 
   render() {
     if (this.state.edit) {
@@ -22,7 +25,7 @@ class Word extends React.Component {
       )
     } else {
       return (
-        <td className="word" onClick={this.handleClick}>{this.props.pair.word}</td>
+        <td className="word" onClick={this.handleClick}>{this.stylize()}</td>
       )
     }
   }
@@ -48,6 +51,16 @@ class Word extends React.Component {
     } else {
       this.props.handleEdit(this.props.pair._id, this.state.word, this.props.pair.definition);
     }
+  }
+
+  stylize() {
+    let s = reactStringReplace(this.state.word, /_(.*?)_/g, (match, i) => (
+      <span key = {i} style={{'fontStyle': 'italic'}}>{match}</span>
+    ))
+    s = reactStringReplace(s, /\*\*(.*?)\*\*/g, (match, i) => (
+      <span key = {i} style={{'fontWeight': 'bold'}}>{match}</span>
+    ))
+    return s;
   }
 
 }
