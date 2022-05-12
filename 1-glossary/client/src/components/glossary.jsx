@@ -23,6 +23,7 @@ class Glossary extends React.Component {
     this.handleDefinitionChange = this.handleDefinitionChange.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleRandom = this.handleRandom.bind(this);
     this.refresh = this.refresh.bind(this);
   }
 
@@ -36,6 +37,7 @@ class Glossary extends React.Component {
         <h1>GLOSSARY</h1>
         <Form handleSubmit={this.handleSubmit} handleWordChange={this.handleWordChange} handleDefinitionChange={this.handleDefinitionChange}/>
         <Search handleSearch={this.handleSearch} handleSearchChange={this.handleSearchChange}/>
+        <input type="submit" value="Random Word and Definition" onClick={this.handleRandom}/>
         <WordList wdPairs={this.state.wdPairs} handleEdit={this.handleEdit} handleDelete={this.handleDelete}/>
       </div>
     );
@@ -105,12 +107,55 @@ class Glossary extends React.Component {
     .catch(err => {
       console.log('handleSearch error');
     })
-
   }
 
   handleSearchChange(e) {
     this.setState({search: e.target.value});
+    axios.post('/search', {term: e.target.value})
+    .then(response => {
+      return this.setState({wdPairs: response.data});
+    })
+    .catch(err => {
+      console.log('handleSearch error');
+    })
+  }
+
+  handleRandom() {
+    return axios('https://random-word-api.herokuapp.com/word')
+      .then(response => {
+        console.log(response.data[0]);
+        const options = {
+          method: 'GET',
+          url: `https://wordsapiv1.p.rapidapi.com/words/${response.data[0]}/definitions`,
+          headers: {
+            'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
+            'X-RapidAPI-Key': '9ef4107bf6msh40b689727bea00ap199af8jsn94c98727da82'
+          }
+        };
+
+        return axios.request(options)
+
+      })
+      .then(function (response) {
+        console.log(response.data);
+        if (response.data.definitions.length) {
+          return axios.post('/words', {
+            word: response.data.word,
+            definition: response.data.definitions[0].definition
+          })
+        }
+      })
+      .then(() => {
+        return this.refresh();
+      })
+      .catch(err => {
+        console.log('handleRandom error');
+        console.error(err);
+      })
+
   }
 }
 
 export default Glossary;
+
+
