@@ -60,6 +60,11 @@ class Word extends React.Component {
     s = reactStringReplace(s, /\*\*(.*?)\*\*/g, (match, i) => (
       <span key = {match + i} style={{'fontWeight': 'bold'}}>{match}</span>
     ))
+    if (this.props.search.length) {
+      s = reactStringReplace(s, new RegExp(`(${this.props.search})`, 'gi'), (match, i) => (
+        <span key = {match + i} style={{'backgroundColor': 'orange'}}>{match}</span>
+      ))
+    }
     return s;
   }
 

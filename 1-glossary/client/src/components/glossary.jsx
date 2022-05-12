@@ -46,7 +46,7 @@ class Glossary extends React.Component {
         <br />
         <button type="button" onClick={this.handlePrevious} disabled={this.state.skip === 0}>Previous Page</button>
         <button type="button" onClick={this.handleNext} disabled={this.state.count - this.state.skip <= 10}>Next Page</button>
-        <WordList wdPairs={this.state.wdPairs} handleEdit={this.handleEdit} handleDelete={this.handleDelete}/>
+        <WordList search={this.state.search} wdPairs={this.state.wdPairs} handleEdit={this.handleEdit} handleDelete={this.handleDelete}/>
       </div>
     );
   }
@@ -136,34 +136,44 @@ class Glossary extends React.Component {
   }
 
   handleRandom() {
-    return axios('https://random-word-api.herokuapp.com/word')
-      .then(response => {
-        console.log(response.data[0]);
-        const options = {
-          method: 'GET',
-          url: `https://wordsapiv1.p.rapidapi.com/words/${response.data[0]}/definitions`,
-          headers: {
-            'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
-            'X-RapidAPI-Key': '9ef4107bf6msh40b689727bea00ap199af8jsn94c98727da82'
-          }
-        };
 
-        return axios.request(options)
-      })
-      .then(function (response) {
-        if (response.data.definitions.length) {
-          return axios.post('/words', {
-            word: response.data.word,
-            definition: response.data.definitions[0].definition
-          })
+    const options = {
+      method: 'GET',
+      url: 'https://wordsapiv1.p.rapidapi.com/words/',
+      params: {random: 'true'},
+      headers: {
+        'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
+        'X-RapidAPI-Key': '9ef4107bf6msh40b689727bea00ap199af8jsn94c98727da82'
+      }
+    };
+
+    return axios.request(options)
+    .then(response => {
+      const options = {
+        method: 'GET',
+        url: `https://wordsapiv1.p.rapidapi.com/words/${response.data.word}/definitions`,
+        headers: {
+          'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
+          'X-RapidAPI-Key': '9ef4107bf6msh40b689727bea00ap199af8jsn94c98727da82'
         }
-      })
-      .then(() => {
-        return this.refresh();
-      })
-      .catch(err => {
-        console.log('handleRandom error');
-        console.error(err);
+      };
+      return axios.request(options)
+    }).then(response => {
+      if (response.data.definitions.length) {
+        return axios.post('/words', {
+          word: response.data.word,
+          definition: response.data.definitions[0].definition
+        })
+      } else {
+        console.log(`no definitions for ${response.data.word}`)
+      }
+    })
+    .then(() => {
+      return this.refresh();
+    })
+    .catch(err=>
+      {
+        console.log('random word error')
       })
   }
 
@@ -179,7 +189,6 @@ class Glossary extends React.Component {
       }
     );
   }
-
 
   handlePrevious() {
     this.setState({skip: this.state.skip - 10}, () => {

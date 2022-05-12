@@ -61,6 +61,11 @@ class Definition extends React.Component {
       // <b>{match}</b>
       <span key = {match + i} style={{'fontWeight': 'bold'}}>{match}</span>
     ))
+    if (this.props.search.length) {
+      s = reactStringReplace(s, new RegExp(`(${this.props.search})`, 'gi'), (match, i) => (
+        <span key = {match + i} style={{'backgroundColor': 'orange'}}>{match}</span>
+      ))
+    }
     return s;
   }
 

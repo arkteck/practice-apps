@@ -18,8 +18,8 @@ class WordDefinition extends React.Component {
     return (
     <tr wid={this.props.pair._id} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
       {this.state.hover ? <td className="delete" onClick={this.props.handleDelete}>❌</td> : <td></td>}
-      <Word pair={this.props.pair} handleEdit={this.props.handleEdit}/>
-      <Definition pair={this.props.pair} handleEdit={this.props.handleEdit}/>
+      <Word pair={this.props.pair} handleEdit={this.props.handleEdit} search={this.props.search}/>
+      <Definition pair={this.props.pair} handleEdit={this.props.handleEdit} search={this.props.search}/>
     </tr>
     );
   }
