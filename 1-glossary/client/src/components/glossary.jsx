@@ -151,7 +151,6 @@ class Glossary extends React.Component {
         return axios.request(options)
       })
       .then(function (response) {
-        console.log(response.data);
         if (response.data.definitions.length) {
           return axios.post('/words', {
             word: response.data.word,

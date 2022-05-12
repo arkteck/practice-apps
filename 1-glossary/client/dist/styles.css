@@ -67,3 +67,39 @@ main {
 #hiddenCol {
   visibility: hidden;
 }
+
+table {
+  border: none;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+table td {
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
+
+table th {
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+
+table td:first-child,
+table th:first-child {
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+table td:nth-child(2),
+table th:nth-child(2) {
+  border-left: none;
+  padding-right: 8px;
+}
+
+table td:last-child,
+table th:last-child {
+  border-right: none;
+  padding-left: 8px;
+}
