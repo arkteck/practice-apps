@@ -20,7 +20,7 @@ let addWord = function(word, definition) {
   return Word.create({word, definition});
 };
 
-let retrieveWords = function() {
+let retrieveWords = function(skip = 0) {
   return Word.estimatedDocumentCount()
     .then(count => {
       if (count === 0) {
@@ -28,7 +28,7 @@ let retrieveWords = function() {
       }
     })
     .then(() => {
-      return Word.find({}, 'word definition');
+      return Word.find({}, 'word definition', {limit: 10, skip});
     })
     .catch((err) => {
 
