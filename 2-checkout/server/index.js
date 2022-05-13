@@ -18,6 +18,7 @@ app.use(logger);
 
 // Serves up all static and generated assets in ../client/dist.
 app.use(express.static(path.join(__dirname, "../client/dist")));
+app.use(express.json());
 
 /****
  *
@@ -27,6 +28,34 @@ app.use(express.static(path.join(__dirname, "../client/dist")));
  *
  */
 
+app.post('/checkout', (req, res) => {
+  let newData = req.body;
+  delete newData.checkout;
+  db.queryAsync('INSERT INTO sessions SET ?', newData)
+    .then((data) => {
+      console.log('app post checkout data', data);
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log('app post checkout error', err.code);
+      let sessionid = newData.sessionid;
+      delete newData.sessionid;
+      if (err.code === 'ER_DUP_ENTRY') {
+        return db.queryAsync('UPDATE sessions SET ? where ?', [newData, {sessionid}])
+        .then((data) => {
+          console.log('app post checkout data', data);
+          res.sendStatus(200);
+        })
+        .catch(err => {
+          console.log('app post checkout error', err.code);
+          res.sendStatus(400);
+        })
+      } else {
+        console.log('err code NOT ER_DUP_ENTRY', err);
+        res.sendStatus(400);
+      }
+    })
+});
 
 
 

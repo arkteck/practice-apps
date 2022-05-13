@@ -1,14 +1,14 @@
 import React from "react";
 import { render } from "react-dom";
-import Form1 from "./form1.jsx";
-import Form2 from "./form2.jsx";
-import Form3 from "./form3.jsx";
+import Forms from "./forms.jsx";
+import axios from "axios";
 
 class Checkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       checkout: 0,
+      sessionid: document.cookie,
       name: '',
       email: '',
       password: '',
@@ -17,48 +17,44 @@ class Checkout extends React.Component {
       city: '',
       state: '',
       zip: '',
+      cardnumber: '',
+      expdate: '',
       cvv: '',
       billingZip: '',
     }
-    this.onClickCheckout = this.onClickCheckout.bind(this);
-    this.onClickForm1 = this.onClickForm1.bind(this);
-    this.onClickForm2 = this.onClickForm2.bind(this);
-    this.onClickForm3 = this.onClickForm3.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+    this.handlePrevious = this.handlePrevious.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
   render() {
-    console.log(this.state.checkout);
-    if (this.state.checkout === 1) {
-      return <Form1 onClick={this.onClickForm1} onChange={this.onChange}/>
-    } else if (this.state.checkout === 2) {
-      return <Form2 onClick={this.onClickForm2} onChange={this.onChange}/>
-    } else if (this.state.checkout === 3) {
-      return <Form3 onClick={this.onClickForm3} onChange={this.onChange}/>
+    if (this.state.checkout) {
+      return <Forms handleNext={this.handleNext} handlePrevious={this.handlePrevious} onChange={this.onChange} checkout={this.state.checkout}/>
     } else {
-      return <button type="button" name="checkout" className="checkout" onClick={this.onClickCheckout}>Checkout</button>
+      return <button type="button" name="checkout" className="button checkout" onClick={this.handleNext}>Checkout</button>
     }
   }
 
-  onClickCheckout() {
-    this.setState({checkout: 1});
+  handleNext() {
+    if (this.state.checkout < 4) {
+      this.setState({checkout: this.state.checkout + 1});
+    } else {
+      this.setState({checkout: 0});
+      axios({
+        method: 'post',
+        url: '/checkout',
+        data: this.state,
+      });
+    }
   }
 
-  onClickForm1() {
-    this.setState({checkout: 2});
-  }
-
-  onClickForm2() {
-    this.setState({checkout: 3});
-  }
-
-  onClickForm3() {
-    this.setState({checkout: 0});
-    console.log(this.state);
+  handlePrevious() {
+    if (this.state.checkout) {
+      this.setState({checkout: this.state.checkout - 1});
+    }
   }
 
   onChange(e) {
-    console.log(e.target.name, e.target.value);
     let newState = {};
     newState[e.target.name] = e.target.value;
     this.setState(newState);
