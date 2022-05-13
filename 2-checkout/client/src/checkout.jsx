@@ -54,10 +54,14 @@ class Checkout extends React.Component {
 
   onClickForm3() {
     this.setState({checkout: 0});
+    console.log(this.state);
   }
 
   onChange(e) {
     console.log(e.target.name, e.target.value);
+    let newState = {};
+    newState[e.target.name] = e.target.value;
+    this.setState(newState);
   }
 }
 
