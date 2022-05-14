@@ -29,9 +29,7 @@ app.use(express.json());
  */
 
 app.post('/checkout', (req, res) => {
-  let newData = req.body;
-  delete newData.checkout;
-  db.queryAsync('INSERT INTO sessions SET ?', newData)
+  db.queryAsync('INSERT INTO sessions SET ?', req.body)
     .then((data) => {
       console.log('app post checkout data', data);
       res.sendStatus(200);
@@ -57,7 +55,15 @@ app.post('/checkout', (req, res) => {
     })
 });
 
-
+app.get('/checkout', (req, res) => {
+  db.queryAsync('SELECT * FROM sessions WHERE ?', {sessionid: req.body.sessionid})
+    .then(response => {
+      console.log(response);
+    })
+    .catch(err => {
+      console.log('app get checkout error', err);
+    })
+});
 
 app.listen(process.env.PORT);
 console.log(`Listening at http://localhost:${process.env.PORT}`);

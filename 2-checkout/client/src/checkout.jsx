@@ -27,9 +27,18 @@ class Checkout extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
+  componentDidMount() {
+
+    axios({
+      method: 'get',
+      url: '/checkout',
+      data: this.state.sessionid,
+    });
+  }
+
   render() {
     if (this.state.checkout) {
-      return <Forms handleNext={this.handleNext} handlePrevious={this.handlePrevious} onChange={this.onChange} checkout={this.state.checkout}/>
+      return <Forms handleNext={this.handleNext} handlePrevious={this.handlePrevious} onChange={this.onChange} state={this.state}/>
     } else {
       return <button type="button" name="checkout" className="button checkout" onClick={this.handleNext}>Checkout</button>
     }
@@ -40,18 +49,23 @@ class Checkout extends React.Component {
       this.setState({checkout: this.state.checkout + 1});
     } else {
       this.setState({checkout: 0});
-      axios({
-        method: 'post',
-        url: '/checkout',
-        data: this.state,
-      });
     }
+    axios({
+      method: 'post',
+      url: '/checkout',
+      data: this.state,
+    });
   }
 
   handlePrevious() {
     if (this.state.checkout) {
       this.setState({checkout: this.state.checkout - 1});
     }
+    axios({
+      method: 'post',
+      url: '/checkout',
+      data: this.state,
+    });
   }
 
   onChange(e) {
