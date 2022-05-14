@@ -3,7 +3,7 @@ function Forms (props) {
       return (
         <div>
           <form id="form1">
-            <p>Please enter your info:</p>
+            <h4>Please {props.state.glitch > .1 ? 'enter' : 'give me'} your info:</h4>
             <label htmlFor="name">
               Name:{' '}
               <input type="text" name="name" id="name" value={props.state.name} onChange={props.onChange}/>
@@ -19,8 +19,8 @@ function Forms (props) {
               <input type="password" name="password" id="password" value={props.state.password} onChange={props.onChange}/>
             </label>
             <br />
-            <button type="button" name="previous" className="button previous" onClick={props.handlePrevious}>Previous</button>
-            <button type="submit" name="next" className="button next" form="form1" onClick={props.validateForm1} disabled={!validateForm(1, props.state)}>Next</button>
+            <button type="button" name="previous" className="button previous button-58" onClick={props.handlePrevious}>Previous</button>
+            <button type="submit" name="next" className="button next button-58" form="form1" onClick={props.validateForm1} disabled={!validateForm(1, props.state)}>Next</button>
           </form>
           <div style={{'color': 'red'}}>{props.state.errMsg}</div>
         </div>
@@ -29,7 +29,7 @@ function Forms (props) {
       return (
         <div>
           <form id="form2">
-            <p>Please enter your info:</p>
+            <h4>Please {props.state.glitch > .1 ? 'enter' : 'give me'} your info:</h4>
             <label htmlFor="addressLine1">
               Address Line 1:{' '}
               <input type="text" name="addressLine1" id="addressLine1" value={props.state.addressLine1} onChange={props.onChange}/>
@@ -55,8 +55,8 @@ function Forms (props) {
               <input type="number" name="zip" id="zip" minLength="5" maxLength="5" value={props.state.zip} onChange={props.onChange}/>
             </label>
             <br />
-            <button type="button" name="previous" className="button previous" onClick={props.handlePrevious}>Previous</button>
-            <button type="submit" name="next" className="button next" form="form2" onClick={props.validateForm2} disabled={!validateForm(2, props.state)}>Next</button>
+            <button type="button" name="previous" className="button previous button-58" onClick={props.handlePrevious}>Previous</button>
+            <button type="submit" name="next" className="button next button-58" form="form2" onClick={props.validateForm2} disabled={!validateForm(2, props.state)}>Next</button>
           </form>
           <div style={{'color': 'red'}}>{props.state.errMsg}</div>
         </div>
@@ -65,7 +65,7 @@ function Forms (props) {
       return (
         <div>
           <form id="form3">
-            <p>Please enter your info:</p>
+            <h4>Please {props.state.glitch > .1 ? 'enter' : 'give me'} your info:</h4>
             <label htmlFor="cardnumber">
               Credit Card:{' '}
               <input type="number" name="cardnumber" id="cardnumber" value={props.state.cardnumber} onChange={props.onChange}/>
@@ -86,24 +86,28 @@ function Forms (props) {
               <input type="number" name="billingZip" id="billingZip" minLength="5" maxLength="5" value={props.state.billingZip} onChange={props.onChange}/>
             </label>
             <br />
-            <button type="button" name="previous" className="button previous" onClick={props.handlePrevious}>Previous</button>
-            <button type="submit" name="next" className="button next" form="form3" onClick={props.validateForm3} disabled={!validateForm(3, props.state)}>Next</button>
+            <button type="button" name="previous" className="button previous button-58" onClick={props.handlePrevious}>Previous</button>
+            <button type="submit" name="next" className="button next button-58" form="form3" onClick={props.validateForm3} disabled={!validateForm(3, props.state)}>Next</button>
           </form>
           <div style={{'color': 'red'}}>{props.state.errMsg}</div>
         </div>
       )
-    } else {
+    } else if (props.state.checkout === 4) {
       return (
         <div>
-          <p>Confirm information and purchase</p>
+          <h4>Confirm information and {props.state.glitch > .1 ? 'purchase' : 'give me'}</h4>
           {Object.keys(props.state).map((k, i) => {
             if (i > 1 && i < 14) {
               return (<p key={i}>{k}: {props.state[k]}</p>)
             }
           })}
-          <button type="button" name="previous" className="button previous" onClick={props.handlePrevious}>Previous</button>
-          <button type="button" name="purchase" className="button next" onClick={props.handleNext}>PURCHASE!</button>
+          <button type="button" name="previous" className="button previous button-58" onClick={props.handlePrevious}>Previous</button>
+          <button type="button" name="purchase" className="button next button-58" onClick={props.handleNext}>PURCHASE!</button>
         </div>
+      )
+    } else {
+      return (
+        <h1>Thank you so much for your {props.state.glitch > .1 ? 'purchase' : 'information'}!</h1>
       )
     }
 
@@ -120,7 +124,5 @@ function Forms (props) {
     }
     return true;
   }
-
-
 
 export default Forms;

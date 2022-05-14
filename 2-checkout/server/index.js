@@ -31,6 +31,7 @@ app.use(express.json());
 app.post('/checkout', (req, res) => {
   let newData = req.body;
   delete newData.errMsg;
+  delete newData.glitch;
   db.queryAsync('INSERT INTO sessions SET ?', req.body)
     .then((data) => {
       console.log('app post checkout data', data);

@@ -22,6 +22,7 @@ class Checkout extends React.Component {
       cvv: '',
       billingZip: '',
       errMsg: '',
+      glitch: 1,
     };
     this.handleNext = this.handleNext.bind(this);
     this.handlePrevious = this.handlePrevious.bind(this);
@@ -30,6 +31,7 @@ class Checkout extends React.Component {
     this.validateForm2 = this.validateForm2.bind(this);
     this.validateForm3 = this.validateForm3.bind(this);
     this.postInfo = this.postInfo.bind(this);
+    this.glitchyText = this.glitchyText.bind(this);
   }
 
   componentDidMount() {
@@ -46,19 +48,20 @@ class Checkout extends React.Component {
     .catch(err => {
       console.log('error retrieving session', err)
     });
+    this.glitchyText();
   }
 
   render() {
     if (this.state.checkout) {
       return <Forms handleNext={this.handleNext} handlePrevious={this.handlePrevious} onChange={this.onChange} state={this.state} validateForm1={this.validateForm1} validateForm2={this.validateForm2} validateForm3={this.validateForm3}/>
     } else {
-      return <button type="button" name="checkout" className="button checkout" onClick={this.handleNext}>Checkout</button>
+      return <div><h4>Just click this button and enter your details!</h4><button type="button" name="checkout" className="button checkout" onClick={this.handleNext}>CHECKOUT</button></div>
     }
   }
 
   handleNext(e) {
     e.preventDefault();
-    if (this.state.checkout < 4) {
+    if (this.state.checkout < 5) {
       this.setState({checkout: this.state.checkout + 1},this.postInfo);
     } else {
       this.setState({checkout: 0},this.postInfo);
@@ -150,6 +153,13 @@ class Checkout extends React.Component {
       console.log('error posting info', err);
     });
   }
+
+  glitchyText() {
+    setInterval(() => {
+      this.setState({glitch: Math.random()})
+    }, 100);
+  }
+
 }
 
 export default Checkout;

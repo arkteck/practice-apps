@@ -4,7 +4,7 @@ import Checkout from "./checkout.jsx";
 
 render(
   <div>
-    <p>Hello, World!</p>
+    <h1>GET A PLAYSTATION 5!</h1>
     <Checkout />
   </div>,
   document.getElementById("root")
