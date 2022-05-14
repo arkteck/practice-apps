@@ -57,11 +57,10 @@ app.post('/checkout', (req, res) => {
     })
 });
 
-app.get('/checkout', (req, res) => {
-  db.queryAsync('SELECT * FROM sessions WHERE ?', {sessionid: req.body.sessionid})
+app.get('/checkout/:sessionid', (req, res) => {
+  db.queryAsync('SELECT * FROM sessions WHERE ?', {sessionid: req.params.sessionid})
     .then(response => {
-      // console.log(response);
-      res.json(response);
+      res.send(response);
     })
     .catch(err => {
       console.log('app get checkout error', err);

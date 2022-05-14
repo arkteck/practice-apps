@@ -29,21 +29,22 @@ class Checkout extends React.Component {
     this.validateForm1 = this.validateForm1.bind(this);
     this.validateForm2 = this.validateForm2.bind(this);
     this.validateForm3 = this.validateForm3.bind(this);
+    this.postInfo = this.postInfo.bind(this);
   }
 
   componentDidMount() {
 
     axios({
       method: 'get',
-      url: '/checkout',
-      data: this.state.sessionid,
+      url: `/checkout/${this.state.sessionid}`,
     })
     .then(response => {
-      console.info(response);
-      console.log(JSON.stringify(response.data, 'utf8'));
-      // response.data[1].forEach(a => {
-      //   console.log(a.name, a._buf.data)
-      // })
+      if (response.data[0].length) {
+        this.setState(response.data[0][0]);
+      }
+    })
+    .catch(err => {
+      console.log('error retrieving session', err)
     });
   }
 
@@ -58,26 +59,16 @@ class Checkout extends React.Component {
   handleNext(e) {
     e.preventDefault();
     if (this.state.checkout < 4) {
-      this.setState({checkout: this.state.checkout + 1});
+      this.setState({checkout: this.state.checkout + 1},this.postInfo);
     } else {
-      this.setState({checkout: 0});
+      this.setState({checkout: 0},this.postInfo);
     }
-    axios({
-      method: 'post',
-      url: '/checkout',
-      data: this.state,
-    });
   }
 
   handlePrevious() {
     if (this.state.checkout) {
-      this.setState({checkout: this.state.checkout - 1});
+      this.setState({checkout: this.state.checkout - 1},this.postInfo);
     }
-    axios({
-      method: 'post',
-      url: '/checkout',
-      data: this.state,
-    });
   }
 
   onChange(e) {
@@ -144,6 +135,20 @@ class Checkout extends React.Component {
     if (errorStr.length === 0) {
       this.handleNext(e);
     }
+  }
+
+  postInfo() {
+    return axios({
+      method: 'post',
+      url: '/checkout',
+      data: this.state,
+    })
+    .then(() => {
+
+    })
+    .catch(err => {
+      console.log('error posting info', err);
+    });
   }
 }
 
