@@ -36,6 +36,7 @@ app.post('/checkout', (req, res) => {
     })
     .catch(err => {
       console.log('app post checkout error', err.code);
+      let newData = req.body;
       let sessionid = newData.sessionid;
       delete newData.sessionid;
       if (err.code === 'ER_DUP_ENTRY') {
@@ -58,7 +59,8 @@ app.post('/checkout', (req, res) => {
 app.get('/checkout', (req, res) => {
   db.queryAsync('SELECT * FROM sessions WHERE ?', {sessionid: req.body.sessionid})
     .then(response => {
-      console.log(response);
+      // console.log(response);
+      res.send(response);
     })
     .catch(err => {
       console.log('app get checkout error', err);

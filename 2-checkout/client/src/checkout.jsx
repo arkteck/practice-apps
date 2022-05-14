@@ -29,11 +29,18 @@ class Checkout extends React.Component {
 
   componentDidMount() {
 
-    axios({
-      method: 'get',
-      url: '/checkout',
-      data: this.state.sessionid,
-    });
+    // axios({
+    //   method: 'get',
+    //   url: '/checkout',
+    //   data: this.state.sessionid,
+    // })
+    // .then(response => {
+    //   console.info(response);
+    //   console.log(JSON.stringify(response.data));
+    //   // response.data[1].forEach(a => {
+    //   //   console.log(a.name, a._buf.data)
+    //   // })
+    // });
   }
 
   render() {
@@ -44,7 +51,8 @@ class Checkout extends React.Component {
     }
   }
 
-  handleNext() {
+  handleNext(e) {
+    e.preventDefault();
     if (this.state.checkout < 4) {
       this.setState({checkout: this.state.checkout + 1});
     } else {
